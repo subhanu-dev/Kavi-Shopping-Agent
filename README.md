@@ -17,6 +17,7 @@ HTML, CSS, JS (Free from Frameworks), Hosted on Vercel
 
 ### AI architecture
 
+![agent_architecture.jpg](Agent_architecture.jpg)
 
 ### Models used
 
