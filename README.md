@@ -2,6 +2,8 @@
 
 Meet Kavi - Your AI Assistant to the largest shopping marketplace in Sri Lanka. Powered by Kapruka MCP
 
+Live at: https://kapruka.axisdatatech.com/
+
 
 ### System Architecture
 
