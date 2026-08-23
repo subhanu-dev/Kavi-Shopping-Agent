@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaví - Kapruka AI Shopping Assistant</title>
+  <meta name="description"
+    content="Chat with Kaví, your AI-powered shopping assistant for Kapruka.com — Sri Lanka's largest e-commerce platform. Browse gifts, cakes, flowers & more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800&display=block"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=15" />
+  <link rel="icon" href="kapruka.png" type="image/png" />
+  <script src="https://kit.fontawesome.com/d89352fd46.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+
+  <div id="app">
+    <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-brand">
+          <div class="brand-logo" onclick="window.location.reload();" style="cursor: pointer;" title="Reload Kaví AI">
+            <div class="logo-image-container" id="kavi-avatar">
+              <img src="kavi_logo_trans.png" alt="Kaví Logo" style="width: 54px; height: 54px; object-fit: contain;" />
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">Kaví AI</span>
+              <span class="brand-subtitle show-on-mobile" style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.7); margin-top: 2px; font-weight: 500; position: relative; top: -10px;">Kapruka Shopping Assistant</span>
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <!-- Quick actions -->
+        <div class="sidebar-section">
+          <span class="section-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            Quick Actions
+          </span>
+          <div class="quick-actions" id="quick-actions">
+            <button class="btn btn-quick btn-quick-flash" onclick="openFlashSearchModal()"
+              id="sidebar-flash-search-btn">
+              <span class="qa-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="10.5" cy="10.5" r="6.5" />
+                  <line x1="15.5" y1="15.5" x2="21" y2="21" />
+                  <path d="M10 7l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5L6.5 11.5l2.5-1z" fill="currentColor" stroke="none" />
+                </svg>
+              </span>
+              <span class="qa-text">Flash Search</span>
+              <span class="qa-arrow flash-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </span>
+            </button>
+            <button class="btn btn-quick" onclick="sendQuickAction(`I\'d like to track my order`)">
+              <span class="qa-icon">
+                <svg class="top-track-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                  </path>
+                  <path class="box-lid-l" d="M3.27 6.96L12 12.01"
+                    style="transform-origin: 3.27px 6.96px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);">
+                  </path>
+                  <path class="box-lid-r" d="M20.73 6.96L12 12.01"
+                    style="transform-origin: 20.73px 6.96px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);">
+                  </path>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+              </span>
+              <span class="qa-text">Track my order</span>
+              <span class="qa-arrow">&rarr;</span>
+            </button>
+            <button class="btn btn-quick" onclick="openCheckDeliveryModal()">
+              <span class="qa-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13" rx="2" ry="2" />
+                  <path d="M16 8h4l3 3v5h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" />
+                </svg>
+              </span>
+              <span class="qa-text">Check Delivery Info</span>
+              <span class="qa-arrow">&rarr;</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section" style="margin-top: 9px;">
+          <span class="section-label" style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+            <span style="display: inline-flex; filter: drop-shadow(0 0 2px rgba(248,218,8,0.5));">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#f8da08" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 2L13.1 8.9C13.5 10.4 14.6 11.5 16.1 11.9L23 13L16.1 14.1C14.6 14.5 13.5 15.6 13.1 17.1L12 24L10.9 17.1C10.5 15.6 9.4 14.5 7.9 14.1L1 13L7.9 11.9C9.4 11.5 10.5 10.4 10.9 8.9L12 2Z" />
+                <path
+                  d="M20.5 3L21 5.5C21.1 6.1 21.6 6.6 22.2 6.7L24.5 7.2L22.2 7.7C21.6 7.8 21.1 8.3 21 8.9L20.5 11.4L20 8.9C19.9 8.3 19.4 7.8 18.8 7.7L16.5 7.2L18.8 6.7C19.4 6.6 19.9 6.1 20 5.5L20.5 3Z" />
+                <path
+                  d="M4.5 18L5 19.5C5.1 19.9 5.4 20.2 5.8 20.3L7.5 20.8L5.8 21.3C5.4 21.4 5.1 21.7 5 22.1L4.5 23.6L4 22.1C3.9 21.7 3.6 21.4 3.2 21.3L1.5 20.8L3.2 20.3C3.6 20.2 3.9 19.9 4 19.5L4.5 18Z" />
+              </svg>
+            </span>
+            Kaví's Picks
+          </span>
+          <div id="kavis-picks-container"
+            style="position: relative; overflow: hidden; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); transition: all 0.2s ease; min-height: 114px;"
+            onmouseover="this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(248,218,8,0.3)'; window.kavisPicksHovered = true;"
+            onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.08)'; window.kavisPicksHovered = false;">
+          </div>
+        </div>
+
+        <!-- Find Me -->
+        <div class="sidebar-section find-me-section" style="margin-top: 15px;">
+          <span class="section-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Find Me
+          </span>
+          <div class="find-me-container" id="find-me-container" style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <!-- 5 slots injected dynamically via JS -->
+            <button class="btn-find-me" id="find-me-slot-0"></button>
+            <button class="btn-find-me" id="find-me-slot-1"></button>
+            <button class="btn-find-me" id="find-me-slot-2"></button>
+            <button class="btn-find-me" id="find-me-slot-3"></button>
+            <button class="btn-find-me" id="find-me-slot-4"></button>
+            <button class="btn-find-me" id="find-me-slot-5"></button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-badge">
+          Powered by <a href="https://kapruka.com" target="_blank" rel="noopener">Kapruka.com</a>
+        </div>
+        <a href="https://github.com/subhanu-dev" target="_blank" rel="noopener" class="btn-github">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#0d1117">
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          subhanu-dev
+        </a>
+      </div>
+    </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- ── Main area ───────────────────────────────────────────────────── -->
+    <main class="main">
+      <!-- Top bar -->
+      <header class="top-bar">
+        <button id="sidebar-toggle" class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="15" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div class="top-bar-brand">
+
+          <div class="top-bar-text">
+            <span class="top-bar-title">
+              <span class="title-full"><span
+                  style="display: inline-flex; align-items: center; gap: 5px; line-height: 1.2;">Kaví by <img
+                    src="kapruka_logo1.png" alt="Kapruka"
+                    style="height: 0.85em; width: auto; display: inline-block; vertical-align: middle;" /></span></span>
+              <span class="title-short">Kaví AI</span>
+            </span>
+            <span class="top-bar-subtitle">AI Shopping Assistant</span>
+          </div>
+        </div>
+        <div class="top-bar-right">
+          <button id="top-track-btn" class="btn btn-glass btn-sm" onclick="showLocalTrackingForm()"
+            aria-label="Track Order" title="Track Order"
+            style="padding: 6px 12px; height: 36px; display: flex; align-items: center; gap: 6px; font-weight: 600; border-radius: 18px; width: auto; flex-shrink: 0;">
+            <svg class="top-track-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+              </path>
+              <path class="box-lid-l" d="M3.27 6.96L12 12.01"
+                style="transform-origin: 3.27px 6.96px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);"></path>
+              <path class="box-lid-r" d="M20.73 6.96L12 12.01"
+                style="transform-origin: 20.73px 6.96px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);"></path>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span class="hide-mobile" style="white-space: nowrap;">Track</span>
+          </button>
+
+          <button id="top-cart-btn" class="cart-btn" onclick="openCart()" aria-label="View Cart" title="View Cart"
+            style="flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="cart-badge" style="display: none;">0</span>
+          </button>
+        </div>
+      </header>
+
+
+
+
+      <!-- Floating 3D Cards -->
+      <div id="floating-cards-container" class="floating-cards-container"></div>
+
+      <div id="chat-container" class="chat-container">
+        <!-- Welcome message -->
+        <div id="welcome" class="welcome">
+          <div class="welcome-card">
+            <div class="welcome-icon">
+              <div class="welcome-icon-ring"></div>
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="kavi-svg-avatar kavi-state-idle">
+                <defs>
+                  <radialGradient id="kaviFace" cx="35%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#805ad5" />
+                    <stop offset="40%" stop-color="#5b3d99" />
+                    <stop offset="100%" stop-color="#2d1b5e" />
+                  </radialGradient>
+                  <linearGradient id="kaviYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffe600" />
+                    <stop offset="100%" stop-color="#f8da08" />
+                  </linearGradient>
+                  <linearGradient id="kaviHeadset" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#4a317a" />
+                    <stop offset="100%" stop-color="#1f1140" />
+                  </linearGradient>
+                  <linearGradient id="kaviGloss" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="rgba(255,255,255,0.7)" />
+                    <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+                  </linearGradient>
+                  <filter id="kaviShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.25" />
+                  </filter>
+                </defs>
+                <rect x="6" y="38" width="16" height="34" rx="8" fill="url(#kaviYellow)" filter="url(#kaviShadow)" />
+                <rect x="2" y="41" width="14" height="28" rx="7" fill="url(#kaviHeadset)" />
+                <rect x="78" y="38" width="16" height="34" rx="8" fill="url(#kaviYellow)" filter="url(#kaviShadow)" />
+                <rect x="84" y="41" width="14" height="28" rx="7" fill="url(#kaviHeadset)" />
+                <!-- Headband Connecting Earcups -->
+                <path d="M 10 45 A 40.3 40.3 0 0 1 90 45" fill="none" stroke="url(#kaviHeadset)" stroke-width="6"
+                  stroke-linecap="round" />
+
+                <!-- Top Headset Nub -->
+                <path d="M 40 10 Q 50 6 60 10 L 58 18 L 42 18 Z" fill="url(#kaviYellow)" />
+                <path d="M 43 8 Q 50 4 57 8 L 55 16 L 45 16 Z" fill="url(#kaviHeadset)" />
+                <circle cx="50" cy="50" r="38" fill="url(#kaviFace)" filter="url(#kaviShadow)" />
+                <ellipse cx="38" cy="32" rx="22" ry="12" transform="rotate(-35 38 32)" fill="url(#kaviGloss)" />
+                <line x1="68" y1="32" x2="78" y2="24" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"
+                  stroke-linecap="round" />
+                <line x1="71" y1="38" x2="80" y2="31" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"
+                  stroke-linecap="round" />
+                <line x1="28" y1="72" x2="20" y2="78" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"
+                  stroke-linecap="round" />
+                <path class="kavi-smile" d="M 30 56 Q 50 78 70 56" fill="none" stroke="url(#kaviYellow)"
+                  stroke-width="6.5" stroke-linecap="round" filter="url(#kaviShadow)" />
+                <path d="M 85 65 Q 92 82 74 86" fill="none" stroke="url(#kaviHeadset)" stroke-width="4.5"
+                  stroke-linecap="round" filter="url(#kaviShadow)" />
+                <rect class="kavi-mic-capsule" x="66" y="83" width="10" height="6" rx="3" fill="url(#kaviHeadset)"
+                  transform="rotate(15 71 86)" />
+                <circle class="kavi-mic-led" cx="69" cy="86" r="1.5" fill="#374151" transform="rotate(15 71 86)" />
+              </svg>
+            </div>
+
+            <h1 class="welcome-title">
+              <span id="typewriter-prefix"></span><span id="typewriter-name" class="gradient-text"></span><span
+                class="typewriter-cursor"></span>
+            </h1>
+            <p class="welcome-subtitle">Your Kapruka Shopping Assistant</p>
+            <p class="welcome-body">
+              <span class="hide-on-mobile">Your AI shopping assistant for <strong>Kapruka.com</strong>.</span> Ask me to find anything from our entire catalog!
+            </p>
+            <div class="welcome-chips-container">
+              <div class="welcome-chips">
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for chocolate birthday cakes and ribbon cakes')"><span
+                    class="chip-icon"><i class="fa-solid fa-cake-candles" style="color: #ff9cf9;"></i></span> <span
+                    class="chip-label">Cakes</span></button>
+                <button class="welcome-chip" onclick="sendQuickAction('Search for red rose bouquets and lilies')"><span
+                    class="chip-icon"><i class="fa-solid fa-spa" style="color: #ff69b4;"></i></span> <span
+                    class="chip-label">Flowers</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for Ferrero Rocher and assorted chocolate boxes')"><span
+                    class="chip-icon"><i class="fa-solid fa-cookie-bite" style="color: #d2691e;"></i></span> <span
+                    class="chip-label">Chocolates</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for personalized mugs and anniversary greeting cards')"><span
+                    class="chip-icon"><i class="fa-solid fa-gift" style="color: #ff69b4;"></i></span> <span
+                    class="chip-label">Gifts</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for fresh fruits, vegetables, and dairy products')"><span
+                    class="chip-icon"><i class="fa-solid fa-apple-whole" style="color: #ff6347;"></i></span> <span
+                    class="chip-label">Groceries</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for popular fiction novels and childrens books')"><span
+                    class="chip-icon"><i class="fa-solid fa-book" style="color: #4682b4;"></i></span> <span
+                    class="chip-label">Books</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for mobile phones, headphones, and smart watches')"><span
+                    class="chip-icon"><i class="fa-solid fa-mobile-screen-button" style="color: #b0c4de;"></i></span>
+                  <span class="chip-label">Electronics</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for hot pizzas, burgers, and fast food')"><span class="chip-icon"><i
+                      class="fa-solid fa-burger" style="color: #d2b48c;"></i></span> <span
+                    class="chip-label">Food</span></button>
+                <button class="welcome-chip" onclick="sendQuickAction('I would like to track my order')"><span
+                    class="chip-icon"><i class="fa-solid fa-box-open" style="color: #deb887;"></i></span> <span
+                    class="chip-label">Track Order</span></button>
+
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for chocolate birthday cakes and ribbon cakes')"><span
+                    class="chip-icon"><i class="fa-solid fa-cake-candles" style="color: #ff9cf9;"></i></span> <span
+                    class="chip-label">Cakes</span></button>
+                <button class="welcome-chip" onclick="sendQuickAction('Search for red rose bouquets and lilies')"><span
+                    class="chip-icon"><i class="fa-solid fa-spa" style="color: #ff69b4;"></i></span> <span
+                    class="chip-label">Flowers</span></button>
+                <button class="welcome-chip" onclick="sendQuickAction('Search for assorted chocolate boxes')"><span
+                    class="chip-icon"><i class="fa-solid fa-cookie-bite" style="color: #d2691e;"></i></span> <span
+                    class="chip-label">Chocolates</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for personalized mugs and anniversary greeting cards')"><span
+                    class="chip-icon"><i class="fa-solid fa-gift" style="color: #ff69b4;"></i></span> <span
+                    class="chip-label">Gifts</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for fresh fruits, vegetables, and dairy products')"><span
+                    class="chip-icon"><i class="fa-solid fa-apple-whole" style="color: #ff6347;"></i></span> <span
+                    class="chip-label">Groceries</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for popular fiction novels and childrens books')"><span
+                    class="chip-icon"><i class="fa-solid fa-book" style="color: #4682b4;"></i></span> <span
+                    class="chip-label">Books</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for mobile phones, headphones, and smart watches')"><span
+                    class="chip-icon"><i class="fa-solid fa-mobile-screen-button" style="color: #b0c4de;"></i></span>
+                  <span class="chip-label">Electronics</span></button>
+                <button class="welcome-chip"
+                  onclick="sendQuickAction('Search for hot pizzas, burgers, and fast food')"><span class="chip-icon"><i
+                      class="fa-solid fa-burger" style="color: #d2b48c;"></i></span> <span
+                    class="chip-label">Food</span></button>
+                <button class="welcome-chip" onclick="sendQuickAction('I would like to track my order')"><span
+                    class="chip-icon"><i class="fa-solid fa-box-open" style="color: #deb887;"></i></span> <span
+                    class="chip-label">Track Order</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll to bottom button -->
+      <button id="scroll-to-bottom-btn" class="scroll-to-bottom-btn" onclick="scrollToBottom()"
+        aria-label="Scroll to bottom" title="Scroll to bottom">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      </button>
+
+      <!-- Input area -->
+      <div class="input-area">
+        <!-- Reorder Popup -->
+        <div id="reorder-popup" class="reorder-popup" onclick="handleReorderClick()">
+          <div class="reorder-popup-icon">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <div class="reorder-popup-text" id="reorder-popup-text">
+            Would you like to order <strong>...</strong> like we did last time?
+          </div>
+          <button class="reorder-popup-close" onclick="closeReorderPopup(event)" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="chat-form" class="chat-form" onsubmit="handleSubmit(event)">
+          <div class="input-wrapper">
+            <textarea id="chat-input" class="chat-input" placeholder="Ask about products, delivery, or orders…" rows="1"
+              maxlength="450" required></textarea>
+            <button type="submit" id="send-btn" class="send-btn" aria-label="Send message" title="Send">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <div class="input-footer">
+          <span></span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+  <aside id="cart-drawer" class="cart-drawer">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <div class="cart-header-actions">
+        <button id="clear-cart-btn" class="clear-cart-btn" onclick="clearCartAction()" title="Clear cart"
+          style="display:none">Clear All</button>
+        <button class="close-cart-btn" onclick="closeCart()" aria-label="Close cart">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="cart-items-container" class="cart-items-container">
+      <!-- Cart items injected here -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="cart-total-display">0 LKR</span>
+      </div>
+      <button id="checkout-btn" class="checkout-btn" onclick="startCheckout()" disabled>Proceed to Delivery</button>
+    </div>
+  </aside>
+
+  <!-- Check Delivery Modal -->
+  <div id="check-delivery-modal" class="modal-overlay" onclick="if(event.target===this) closeCheckDeliveryModal()">
+    <div class="modal-content flash-search-content">
+      <div class="modal-header flash-modal-header">
+        <div class="flash-modal-title">
+          <span class="flash-modal-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" />
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+              <circle cx="5.5" cy="18.5" r="2.5" />
+              <circle cx="18.5" cy="18.5" r="2.5" />
+            </svg>
+          </span>
+          <div>
+            <h3>Check Delivery Info</h3>
+            <p class="flash-modal-subtitle">Instant rates & availability</p>
+          </div>
+        </div>
+        <button type="button" class="close-modal" onclick="closeCheckDeliveryModal()" aria-label="Close">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="check-delivery-form" onsubmit="handleCheckDelivery(event)">
+          <div class="flash-field-group">
+            <label class="flash-label" for="delivery-city">City</label>
+            <input type="text" id="delivery-city" name="city" class="flash-text-input"
+              placeholder="e.g. Nugegoda, Kandy" required />
+          </div>
+
+          <div class="flash-field-group" style="margin-top: 14px;">
+            <label class="flash-label" for="delivery-date">Delivery Date</label>
+            <input type="date" id="delivery-date" name="delivery_date" class="flash-text-input" required />
+          </div>
+
+          <button type="submit" id="check-delivery-submit-btn" class="flash-search-submit"
+            style="width: 100%; margin-top: 20px;">Check Availability</button>
+        </form>
+
+        <div id="delivery-result-container"
+          style="display: none; margin-top: 20px; padding: 15px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.95);">
+          <!-- Results injected here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flash Search Modal -->
+  <div id="flash-search-modal" class="modal-overlay" onclick="if(event.target===this) closeFlashSearchModal()">
+    <div class="modal-content flash-search-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header flash-modal-header">
+        <div class="flash-modal-title">
+          <span class="flash-modal-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <line x1="15.5" y1="15.5" x2="21" y2="21" />
+              <path d="M10 7.5l0.9 2.1 2.1 0.9-2.1 0.9-0.9 2.1-0.9-2.1L7 11l2.1-0.9z" fill="currentColor"
+                stroke="none" />
+            </svg>
+          </span>
+          <div>
+            <h3>Flash Search</h3>
+            <p class="flash-modal-subtitle">Customize your product search fast</p>
+          </div>
+        </div>
+        <button type="button" class="close-modal" onclick="closeFlashSearchModal()" aria-label="Close">×</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+
+        <!-- Product input -->
+        <div class="flash-field-group">
+          <label class="flash-label" for="flash-product">
+            <span class="flash-label-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="16.5" y1="16.5" x2="21" y2="21" />
+              </svg>
+            </span> What are you looking for?
+          </label>
+          <input type="text" id="flash-product" class="flash-text-input"
+            placeholder="e.g. Birthday Cake, Red Roses, Laptop…" autocomplete="off" maxlength="120" />
+        </div>
+
+        <!-- Budget toggle + slider -->
+        <div class="flash-field-group">
+          <div class="flash-toggle-row">
+            <label class="flash-label" for="flash-budget-toggle">
+              <span class="flash-label-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="8" />
+                  <path
+                    d="M12 7v1m0 8v1M9.5 9.5C9.5 8.7 10.7 8 12 8s2.5.7 2.5 1.5S13.3 11 12 11s-2.5.7-2.5 1.5S10.7 14 12 14s2.5.7 2.5 1.5" />
+                </svg>
+              </span> Set a budget?
+            </label>
+            <label class="flash-toggle-switch" for="flash-budget-toggle">
+              <input type="checkbox" id="flash-budget-toggle" onchange="toggleFlashBudget(this)" />
+              <span class="flash-toggle-track"></span>
+            </label>
+          </div>
+          <div class="flash-budget-slider-wrap" id="flash-budget-wrap">
+            <div class="flash-budget-header">
+              <span class="flash-budget-label">Max Budget</span>
+              <span class="flash-budget-value">LKR <strong id="flash-budget-display">15,000</strong></span>
+            </div>
+            <input type="range" id="flash-budget" class="flash-range" min="1000" max="250000" step="1000" value="15000"
+              oninput="updateFlashBudgetDisplay(this.value)" />
+            <div class="flash-range-labels">
+              <span>LKR 1K</span>
+              <span>LKR 250K</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sort preference -->
+        <div class="flash-field-group">
+          <label class="flash-label">
+            <span class="flash-label-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="6" x2="20" y2="6" />
+                <line x1="4" y1="12" x2="14" y2="12" />
+                <line x1="4" y1="18" x2="10" y2="18" />
+                <polyline points="17 15 20 12 17 9" />
+              </svg>
+            </span> Sort preference
+          </label>
+          <div class="flash-sort-pills" id="flash-sort-pills">
+            <button type="button" class="flash-sort-pill active" data-sort="newest" onclick="selectFlashSort(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              Newest
+            </button>
+            <button type="button" class="flash-sort-pill" data-sort="bestseller" onclick="selectFlashSort(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                <circle cx="12" cy="8" r="6" />
+                <path d="M15.47 14L19 22l-7-3-7 3 3.53-8" />
+              </svg>
+              Bestseller
+            </button>
+            <button type="button" class="flash-sort-pill" data-sort="cheapest" onclick="selectFlashSort(this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                <path d="M12 2L8 8H4l8 14 8-14h-4z" />
+              </svg>
+              Cheapest
+            </button>
+          </div>
+        </div>
+
+        <!-- Optional keyword/category -->
+        <div class="flash-field-group">
+          <div class="flash-toggle-row">
+            <label class="flash-label" for="flash-keyword-toggle">
+              <span class="flash-label-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                </svg>
+              </span> Narrow it down?
+            </label>
+            <label class="flash-toggle-switch" for="flash-keyword-toggle">
+              <input type="checkbox" id="flash-keyword-toggle" onchange="toggleFlashKeyword(this)" />
+              <span class="flash-toggle-track"></span>
+            </label>
+          </div>
+          <div class="flash-keyword-wrap" id="flash-keyword-wrap">
+            <input type="text" id="flash-keyword" class="flash-text-input"
+              placeholder="e.g. chocolate, for kids, premium brand…" autocomplete="off" maxlength="80" />
+          </div>
+        </div>
+
+      </div><!-- /modal-body -->
+
+      <!-- Modal Footer -->
+      <div class="modal-footer flash-modal-footer">
+        <button type="button" class="flash-search-submit" id="flash-search-submit" onclick="submitFlashSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          Search Now
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div id="checkout-modal" class="modal-overlay" onclick="if(event.target===this) closeCheckoutModal()">
+    <div class="modal-content" style="max-width: 1000px; width: 95%; height: 90vh; display: flex; flex-direction: column; padding: 0; background: #fff;">
+      <div class="modal-header flash-modal-header" style="border-bottom: 1px solid rgba(0,0,0,0.08); padding: 12px 20px;">
+        <div class="flash-modal-title">
+          <span class="flash-modal-icon" style="background: rgba(64,41,112,0.1); color: var(--primary); font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+          <div>
+            <h3 style="margin:0; font-size: 1.1rem; color: var(--primary-dark); font-weight: 700;">Secure Checkout</h3>
+            <p style="margin: 2px 0 0; font-size: 0.75rem; color: #666;">Kapruka.com payment gateway</p>
+          </div>
+        </div>
+        <button type="button" class="close-modal" onclick="closeCheckoutModal()" aria-label="Close" style="color: #333;">×</button>
+      </div>
+      <div class="modal-body" style="flex: 1; padding: 0; border-radius: 0 0 16px 16px; overflow: hidden; position: relative;">
+        <div id="checkout-loader" style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; justify-content:center; align-items:center; background: #f9f9f9; z-index: 1;">
+          <div class="checkout-skeleton">
+            <div class="skel-header">
+              <div class="skel-icon shimmer"></div>
+              <div class="skel-title-group">
+                <div class="skel-line skel-line--lg shimmer"></div>
+                <div class="skel-line skel-line--sm shimmer"></div>
+              </div>
+            </div>
+            <div class="skel-body">
+              <div class="skel-label shimmer"></div>
+              <div class="skel-input shimmer"></div>
+              <div class="skel-row">
+                <div class="skel-col">
+                  <div class="skel-label shimmer"></div>
+                  <div class="skel-input shimmer"></div>
+                </div>
+                <div class="skel-col">
+                  <div class="skel-label shimmer"></div>
+                  <div class="skel-input shimmer"></div>
+                </div>
+              </div>
+              <div class="skel-label shimmer"></div>
+              <div class="skel-input shimmer"></div>
+              <div class="skel-btn shimmer"></div>
+            </div>
+            <div class="skel-footer">
+              <div class="skel-badge shimmer"></div>
+            </div>
+          </div>
+        </div>
+        <iframe id="checkout-iframe" src="" style="width: 100%; height: 100%; border: none; position: relative; z-index: 2;" onload="document.getElementById('checkout-loader').style.display='none';"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="particles.js"></script>
+  <script src="chat.js?v=15"></script>
+
+</body>
+
+</html>
+
