@@ -12,10 +12,10 @@ Kaví can search Kapruka's live catalog 🔍, understand English, Sinhala, Tamil
 
 Technologies Used
 
-Backend
+Backend <br>
 Python , FastAPI , LangGraph , LangChain, Postgress, Iniitally Hosted on Railway - Currently self-hosted on a VPS
 
-Frontend
+Frontend <br>
 HTML, CSS, JS (Free from Frameworks), Hosted on Vercel
 
 
