@@ -8,6 +8,8 @@ Kaví is an intelligent shopping companion that can help you find anything you l
 
 Kaví can search Kapruka's live catalog 🔍, understand English, Sinhala, Tamil, Singlish and Tanglish (Truly multilingual) 🗣️, remember user histories 📝, manage shopping carts 🛍️, guide customers all the way to checkout 💳, and even track existing orders 📦 ; all through natural conversation
 
+![Kavi_homepage](/Images/kavi_home.png)
+
 ## System Architecture
 
 Technologies Used
@@ -140,10 +142,10 @@ The output of the product agent is designed to be as short as possible
 
 Its final text is **internal only**. the shortest possible factual status note (what was searched, found, changed, out of stock). Kavi owns every greeting, emoji, and upsell; duplicating them here is wasted tokens. 
 
-User Persistence
+![Kavi_products](/Images/Kavi_search.png)
 
-- Session ID - one conversation thread (persists until abandoned) 
-- User ID - This user ID persists in customers browser localstorage. Since no login functionality was implemented to avoid adding signup friction - we are able to identify a user uniquely using this id persisted in browser storage that let's the users to continue
+
+![Kavi_addtocart](/Images/add_to_cart.png)
 
 ### Order agent
 
@@ -194,6 +196,9 @@ When a user submits a form or clicks a button, the frontend injects a determinis
   • none / Timeout: If the user's message lacks actionable details, or if the 30-second timebox       
   expires, the system safely bails out. The checkout state remains completely unchanged (non-         
   destructive), and a system note is passed downstream to ask the user to clarify. 
+
+
+![Kavi_checkout](/Images/checkout.png)
 
 
 The order_agent is the most heavily guarded part of the Kavi assistant. Because checkout involves   
@@ -279,6 +284,13 @@ The order_agent is the most heavily guarded part of the Kavi assistant. Because 
   database/API errors are never shown to the customer.
 
 
+![Kavi_checkout](/Images/payment.png)
+
+
+
+![checkout](/Images/secure_checkout.png)
+
+
 ### `fast_support_agent` - Order tracking Agent
 
 
@@ -294,6 +306,9 @@ Then:
 - **"error"/"not found" in the result, or an exception** → re-show the form plus a `(System note: …)` telling Kavi to have the customer double-check the id from their confirmation email.
 
 `extracted_order_id` is always cleared on exit (one-shot). The wrapped tool's docstring also encodes a subtle domain fact: the trackable *order_number* from the confirmation email is **not** the pre-payment `order_ref` returned by place_order.
+
+
+![Kavi_checkout](/Images/tracking_orders.png)
 
 ## Kavi_agent - The Voice
 
@@ -477,7 +492,10 @@ There is no login: the frontend generates a `user_id`, stores it in localStorage
 
 **Personalization flow** (`personalization.py`): on the *first turn of a brand-new thread only* (detected by an empty checkpoint snapshot), `load_user_context` reads both namespaces and summarizes into `user_context` — `{is_returning, recent_searches (≤5), last_order {order_ref, item_names, created_at}}` — which then rides in checkpointed state (never re-queried mid-thread). It feeds two prompts: product_agent's history-biased suggestions (suppressed on cross-sell turns) and Kavi's first-turn-only "welcome back" flourish. Every step is best-effort: any failure means "no personalization", never an error.
 
+User Persistence
 
+- Session ID - one conversation thread (persists until abandoned) 
+- User ID - This user ID persists in customers browser localstorage. Since no login functionality was implemented to avoid adding signup friction - we are able to identify a user uniquely using this id persisted in browser storage that let's the users to continue
 
 ## File map
 
@@ -500,6 +518,15 @@ There is no login: the frontend generates a `user_id`, stores it in localStorage
 | `tests/` | ~500 | Unit tests for the deterministic cores: cart mutations, the checkout gate + city resolution, action payloads, personalization summaries |
 | `TASKS.md`, `AGENT_OPERATIONS.md`, `frontend_integration_guide.md`, `findings.md`, `mcp_info.md` | — | Sprint log, ops notes, the contract doc the frontend was built against, research notes |
 
+
+
+![Kavi_checkout](/Images/observability.png)
+
+
+![Kavi_search](/Images/flash_search.png)
+
+
+![Kavi_checkout](/Images/kavi_home2.png)
 
 
 ---
