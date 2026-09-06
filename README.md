@@ -13,7 +13,7 @@ Kaví can search Kapruka's live catalog 🔍, understand English, Sinhala, Tamil
 Technologies Used
 
 Backend <br>
-Python , FastAPI , LangGraph , LangChain, Postgress, Iniitally Hosted on Railway - Currently self-hosted on a VPS
+Python , FastAPI , LangGraph , LangChain, Postgress, Iniitally Hosted on Railway - Currently self-hosted on a VPS, Kapruka MCP Server
 
 Frontend <br>
 HTML, CSS, JS (Free from Frameworks), Hosted on Vercel
@@ -37,7 +37,21 @@ Though end users interact only one one chat interface, Kaví is build on a tiere
 
 Every conversational path funnels through **kavi_agent**, the single voice the customer ever hears. Specialist agents write terse internal "status notes" that Kavi rewrites from scratch.
 
+Tools available in Kapruka MCP,
 
+
+| Tool                           | Purpose                                                 | Key Inputs                                                                                        | Output / Use                                                                              |
+| ------------------------------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `kapruka_list_categories`      | Browse Kapruka's product category hierarchy             | `depth`, `response_format`                                                                        | Category names, sub-categories, and public category URLs                                  |
+| `kapruka_search_products`      | Search Kapruka products with filtering and pagination   | `q`, `category`, `limit`, `cursor`, `currency`, `min_price`, `max_price`, `in_stock_only`, `sort` | Matching products with IDs, prices, stock status, images, categories, and URLs            |
+| `kapruka_get_product`          | Retrieve complete details for a specific product        | `product_id`, `currency`, `type`, `response_format`                                               | Product details, variants, images, pricing, stock, shipping, attributes, and URL          |
+| `kapruka_list_delivery_cities` | Find Kapruka-supported delivery cities                  | `query`, `limit`, `response_format`                                                               | Canonical city names and aliases                                                          |
+| `kapruka_check_delivery`       | Check delivery availability and pricing for a city/date | `city`, `delivery_date`, `product_id`, `response_format`                                          | Availability, delivery fee, next available date, and perishable-item warnings             |
+| `kapruka_create_order`         | Create a guest checkout and generate a payment link     | `cart`, `recipient`, `delivery`, `sender`, `gift_message`, `currency`                             | Checkout URL, pre-payment order reference, totals, and expiry time                        |
+| `kapruka_track_order`          | Track a completed Kapruka order                         | `order_number`, `response_format`                                                                 | Order status, delivery details, progress timeline, items, and delivery media availability |
+
+
+Component configs
 
 | Node | LLM? | Model | Role |
 |---|---|---|---|
@@ -50,19 +64,6 @@ Every conversational path funnels through **kavi_agent**, the single voice the c
 | `fast_ui_agent` | **No** | — | Instant canned replies for cart-button clicks |
 
 
-**Three short-circuits run before any LLM call:**
-
-1. **UI action events.** Button/form clicks arrive as synthetic human messages like `[ui_action:add_to_cart] {"product_id": "...", ...}`. The action type maps directly to an agent via `_UI_ACTION_AGENT`:
-
-   | Action | Destination | Why |
-   |---|---|---|
-   | `checkout_form_submit`, `place_order` | `order_agent` | Checkout logic lives there |
-   | `remove_from_cart`, `update_qty`, `clear_cart` | `fast_ui_agent` | Endpoint already mutated the cart; a specialist would only produce a discarded draft |
-   | `track_order_submit` | `fast_support_agent` | Tracking |
-   | `add_to_cart` (and anything unmapped) | `product_agent` | An add can still trigger a real cross-sell search |
-
-2. **Kavi's Picks click.** `pending_product_view` in state → straight to `product_agent` (the clicked id came from our own listing; nothing to classify).
-3. Otherwise → the **router LLM**.
 
 
 ### Router Agent Node - master_router
@@ -83,6 +84,31 @@ Routing rules baked into the prompt (the ones that matter):
 "Checkout in progress" itself is tested as `checkout is not None` (not truthiness) — `{}` is a valid in-progress checkout — which is also what keeps the post-order *"track it?" → "yes"* flow from being dragged back into an empty-cart checkout.
 
 **The router LLM call** returns a Pydantic `RouterDecision` in a single structured-output call:
+```
+class RouterDecision(BaseModel):
+    detected_language: Literal["English", "Sinhala", "Tamil"]
+    next_agent: Literal["product_agent", "order_agent", "fast_support_agent",
+                        "kavi_agent", "fast_ui_agent"]
+    extracted_order_id: str | None   # tracking number found in the message, if any
+```
+
+**Three short-circuits run before any LLM call:**
+
+1. **UI action events.** Button/form clicks arrive as synthetic human messages like `[ui_action:add_to_cart] {"product_id": "...", ...}`. The action type maps directly to an agent via `_UI_ACTION_AGENT`:
+
+   | Action | Destination | Why |
+   |---|---|---|
+   | `checkout_form_submit`, `place_order` | `order_agent` | Checkout logic lives there |
+   | `remove_from_cart`, `update_qty`, `clear_cart` | `fast_ui_agent` | Endpoint already mutated the cart; a specialist would only produce a discarded draft |
+   | `track_order_submit` | `fast_support_agent` | Tracking |
+   | `add_to_cart` (and anything unmapped) | `product_agent` | An add can still trigger a real cross-sell search |
+
+2. **Kavi's Picks click.** `pending_product_view` in state → straight to `product_agent` (the clicked id came from our own listing; nothing to classify).
+3. Otherwise → the **router LLM**.
+
+Every interaction does through an llm inference in the router node unless it is a UI interaction(Cart interactions) that sets the next agent to fast_ui_agent without spending time for an LLM call.
+
+
 
 ###  `product_agent` — search, details, cart (LLM + tool loop)
 
@@ -98,6 +124,9 @@ The only agent still using the classic LangGraph pattern: LLM decides → `ToolN
 | `remove_from_cart`, `update_cart_quantity`, `clear_cart` | Local | Same `cart.py` functions the REST endpoints use; `clear_cart` also resets `checkout`, `delivery_confirmed`, `cross_sold_categories` |
 
 
+User Persistence
 
+- Session ID - one conversation thread (persists until abandoned) 
+- User ID - This user ID persists in customers browser localstorage. Since no login functionality was implemented to avoid adding signup friction - we are able to identify a user uniquely using this id persisted in browser storage that let's the users to continue 
 
 
