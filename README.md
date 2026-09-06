@@ -3,6 +3,7 @@
 Meet Kaví- Your AI Assistant to the largest shopping marketplace in Sri Lanka. Powered by Kapruka MCP
 
 Live at: https://kapruka.axisdatatech.com/
+Demo video: https://youtu.be/nzJsvT_ql88
 
 Kaví is an intelligent shopping companion that can help you find anything you like from thousands of live products available at Kapruka.com 
 
