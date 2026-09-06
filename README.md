@@ -232,7 +232,7 @@ The order_agent is the most heavily guarded part of the Kavi assistant. Because 
   No matter how a city is submitted (typed in chat or filled in a form), it is never blindly saved.   
   Instead, it is routed to a strict verification process (check_delivery_core):                       
                                                                                                       
-  1. Live Search: The system pings the Kapruka API to search for the user's typed city.               
+  1. Live Search: The system pings the Kapruka MCP (get the canonical city from the kapruka_list_delivery_cities tool) to search for the user's typed city.               
   2. Strict Matching: The system will only accept an exact match or a single unique result. If the    
   user types an ambiguous city (e.g., "Colombo"), the system refuses to save it and instead asks the  
   user to clarify ("Did you mean Colombo 3, Colombo 7...?").                                          
@@ -254,13 +254,13 @@ The order_agent is the most heavily guarded part of the Kavi assistant. Because 
                                                                                                       
   If any check fails, the process instantly halts and tells the user exactly what to fix:             
                                                                                                       
-   Step │ What it checks         │ What happens if it fails
-  ──────┼────────────────────────┼────────────────────────────────────────────────────────────────────
-   1    │ Is the cart empty?     │ Aborts: "Your cart is empty — let's add something first!"
-   2    │ Are all fields filled? │ Aborts: "I still need: recipient's phone number, delivery date."
-   3    │ Is the phone valid?    │ Aborts: "Please use a 10-digit Sri Lankan number."
-   4    │ Is delivery confirmed? │ Aborts: "Let's confirm delivery is available for your city and
-        │                        │ date first."
+| Step | What it checks         | What happens if it fails                                                    |
+| ---: | ---------------------- | --------------------------------------------------------------------------- |
+|    1 | Is the cart empty?     | Aborts: “Your cart is empty — let's add something first!”                   |
+|    2 | Are all fields filled? | Aborts: “I still need: recipient's phone number, delivery date.”            |
+|    3 | Is the phone valid?    | Aborts: “Please use a 10-digit Sri Lankan number.”                          |
+|    4 | Is delivery confirmed? | Aborts: “Let's confirm delivery is available for your city and date first.” |
+
                                                                                                       
   Because only the strict City Gate (Step 2) can approve Step 4, an LLM can never accidentally        
   hallucinate that an order is ready to place.                                                        
