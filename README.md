@@ -36,8 +36,8 @@ Though end users interact only one one chat interface, Kaví is build on a tiere
 ### Models used
 
 - Router Agent Node (concierge): GPT OSS 20B using Groq, Fallback : Gemini 2.55-flash-lite
-- Subagents
-  Product agent - GPT-5.4-mini
+- Subagents <br>
+  Product agent - GPT-5.4-mini <br>
   Order agent - Gemini-2.5 flash-lite
 
 - Conversational Agent (Kavi Agent) - Gemini-3.5-flash
